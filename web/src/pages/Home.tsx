@@ -43,6 +43,7 @@ function Home (){
         pageNumbers.push(i)
     }
 
+    const currentPageNumbers = pageNumbers.slice(0,10)
     const paginate = (pageNumber:any) => setCurrentPage(pageNumber)
 
  return(
@@ -64,7 +65,7 @@ function Home (){
                 </div>
                 ))}
                  <ul className="pagination">
-                {pageNumbers.map(number=>(
+                {currentPageNumbers.map(number=>(
                     <li className="page-item">
                         <a id="page-link" href="#" onClick={()=>paginate(number)} className="page-link">
                             <p>{number}</p>
