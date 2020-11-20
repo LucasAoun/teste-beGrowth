@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react'
 import '../styles/pages/home.css'
 import Sidebar from '../components/Sidebar'
 import api from '../services/api'
+import ReactPaginate from 'react-paginate'
 
 
 interface Item {
@@ -16,8 +17,9 @@ function Home (){
 
     const [photos, setPhotos] = useState<Item[]>([])
     const [loading, setLoading] = useState(false)
-    const [currentPage, setCurrentPage] = useState(1)
+    const [currentPage, setCurrentPage] = useState(0)
     const [photosPerPage] = useState(50)
+    const [search, setSearch] = useState('')
 
 
     useEffect(()=>{
@@ -32,20 +34,19 @@ function Home (){
         return <h1>Loading...</h1>
     }
 
-
-
-    const indexOfLastPhoto = currentPage * photosPerPage
+    const indexOfLastPhoto = (currentPage+1) * photosPerPage
     const indexOfFirstPhoto = indexOfLastPhoto - photosPerPage
     const currentPhotos = photos.slice(indexOfFirstPhoto, indexOfLastPhoto)
 
-    const pageNumbers = []
-    for(let i = 1; i<=Math.ceil(photos.length / photosPerPage); i++){
-        pageNumbers.push(i)
+    const pageNumbers = Math.ceil(photos.length / photosPerPage);
+    console.log(currentPhotos)
+
+    function handleSelectPage(e:any){
+        const selectedPage = e.selected
+        const offset = selectedPage * 1
+        setCurrentPage(offset)
+        console.log(offset)
     }
-
-    const currentPageNumbers = pageNumbers.slice(0,10)
-    const paginate = (pageNumber:any) => setCurrentPage(pageNumber)
-
  return(
      <div className="page-home">
          <Sidebar/>
@@ -60,19 +61,22 @@ function Home (){
              <div className="card-container">
                  {currentPhotos.map(item=>(
                 <div key={item.id} className="card">
-                    <img src={item.thumbnailUrl} alt=""/>
+                   <a href={item.url} target="_blank"><img src={item.thumbnailUrl} alt=""/></a> 
                     <p className="thumbTitle">{item.title}</p>
                 </div>
                 ))}
-                 <ul className="pagination">
-                {currentPageNumbers.map(number=>(
-                    <li className="page-item">
-                        <a id="page-link" href="#" onClick={()=>paginate(number)} className="page-link">
-                            <p>{number}</p>
-                        </a>
-                    </li>
-                ))}
-            </ul>
+                <ReactPaginate
+                    previousLabel={"Prev"}
+                    nextLabel={"Next"}
+                    breakLabel={"..."}
+                    breakClassName={"break-me"}
+                    pageCount={pageNumbers}
+                    marginPagesDisplayed={1}
+                    pageRangeDisplayed={7}
+                    onPageChange={handleSelectPage}
+                    containerClassName={"pagination"}
+                    activeClassName={"active"}
+                    />
             </div>
         </div>
      </div>

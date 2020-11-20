@@ -77,13 +77,17 @@
 .pagination a{
     text-decoration: none;
     cursor: pointer;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-.pagination p:active{
-    background-color: darkmagenta;
-    border:darkmagenta;
+.pagination a:focus{
+    background-color: rgb(167, 164, 167);
+    outline: none;
 }
-.pagination li p {
-    border: 1px rgb(141, 141, 141) solid;
+.pagination li {
+    border: 1px rgb(135, 182, 214) solid;
     background-color: rgb(230, 227, 227);
     width: 40px;
     display: flex;
